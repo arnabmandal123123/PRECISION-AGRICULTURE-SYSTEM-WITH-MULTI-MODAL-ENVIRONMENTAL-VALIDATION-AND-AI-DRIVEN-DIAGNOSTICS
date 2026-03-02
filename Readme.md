@@ -1,8 +1,8 @@
-# FINAL YEAR PROJECT REPORT: Agri-Nigrani - An Integrated IoT Solution for Precision Agriculture and Security
+# FINAL YEAR PROJECT REPORT: Agri-Nigrani - DESIGN AND DEVELOPMENT OF AN IOT-INTEGRATED PRECISION AGRICULTURE SYSTEM WITH MULTI-MODAL ENVIRONMENTAL VALIDATION
 
 **Project Name:** Agri-Nigrani (Smart Agriculture & Security System)  
 **Academic Year:** 2025-2026  
-**Level:** Undergraduate (Final Year)  
+  
 **Department:** Electrical & Electronic Engineering  
 
 ---

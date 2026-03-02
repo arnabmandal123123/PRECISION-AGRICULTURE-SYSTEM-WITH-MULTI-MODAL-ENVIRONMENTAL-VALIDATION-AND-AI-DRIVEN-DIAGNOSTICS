@@ -42,12 +42,14 @@ service cloud.firestore {
     
     // ============ USER SETTINGS ============
     match /userSettings/{documentId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && request.auth.uid == documentId;
       
       // Validate dry run protection setting
-      allow update: if request.auth != null
+      allow update: if request.auth != null && request.auth.uid == documentId
         && (!request.resource.data.keys().hasAny(['dryRunProtection']) 
-            || request.resource.data.dryRunProtection is bool);
+            || request.resource.data.dryRunProtection is bool)
+        && (!request.resource.data.keys().hasAny(['securityModes']) 
+            || request.resource.data.securityModes is map);
     }
     
     // ============ DISEASE ANALYTICS & FEEDBACK ============
@@ -67,6 +69,20 @@ service cloud.firestore {
     // ============ ACTIVITY LOGS ============
     match /activityLogs/{documentId} {
       allow read, write: if request.auth != null;
+    }
+    
+    // ============ FARM TASKS (Scheduler) ============
+    match /farmTasks/{taskId} {
+      allow read: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.date is string;
+      allow update: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
     }
     
     // ============ SYSTEM SETTINGS (Auto Mode, etc) ============
@@ -89,37 +105,39 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
     
-    // ============ NUTRIENT LOSS MONITOR (NEW) ============
-    // Active nutrient monitoring event
+// ============ NUTRIENT LOSS MONITOR ============
+    // Active nutrient monitoring event (single document, overwritten on each event start)
     match /nutrientMonitor/activeEvent {
       allow read: if request.auth != null;
       allow create, update: if request.auth != null
-        && request.resource.data.startTime != null
         && request.resource.data.initialTDS is number
         && request.resource.data.initialTDS >= 0;
       allow delete: if request.auth != null;
     }
-    
-    // Nutrient event history
-    match /nutrientMonitor/history/{eventId} {
+
+    // Nutrient event history — flat top-level collection (one doc per completed event)
+    // Fields: date, startTime, endTime, type, initialTDS, finalTDS,
+    //         nutrientLoss, lossPercentage, severity, rainDetected, pumpUsed
+    match /nutrientLossHistory/{eventId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null
-        && request.resource.data.startTime != null
-        && request.resource.data.endTime != null
         && request.resource.data.initialTDS is number
         && request.resource.data.finalTDS is number
         && request.resource.data.nutrientLoss is number
-        && request.resource.data.lossPercentage is number;
+        && request.resource.data.lossPercentage is number
+        && request.resource.data.type is string
+        && request.resource.data.severity is string
+        && request.resource.data.severity in ['Safe', 'Warning', 'Critical'];
       allow update, delete: if request.auth != null;
     }
-    
+
     // Multi-device nutrient alerts
     match /alerts/nutrientAlert {
       allow read: if request.auth != null;
       allow write: if request.auth != null
         && request.resource.data.isActive is bool
         && request.resource.data.severity is string
-        && request.resource.data.severity in ['safe', 'warning', 'critical'];
+        && request.resource.data.severity in ['warning', 'critical'];
     }
     
     // ============ USERS ============
