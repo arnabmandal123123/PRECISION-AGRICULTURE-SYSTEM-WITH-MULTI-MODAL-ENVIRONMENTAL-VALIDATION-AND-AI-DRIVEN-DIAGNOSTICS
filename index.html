@@ -78,8 +78,8 @@
       --elevation-1: 0 4px 20px rgba(0, 0, 0, 0.25);
       --elevation-2: 0 8px 32px rgba(0, 0, 0, 0.35);
 
-      --radius: 20px;
-      --radius-sm: 12px;
+      --radius: 14px;
+      --radius-sm: 8px;
 
       --font-display: 'Outfit', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -362,6 +362,16 @@
 
     /* Mobile adjustments for landing */
     @media (max-width: 480px) {
+      body {
+        padding: 0;
+        padding-bottom: 100px;
+      }
+
+      .wrap {
+        padding: 0 0 100px 0;
+        gap: 16px;
+      }
+
       .landing-overlay {
         padding: 16px;
       }
@@ -376,13 +386,13 @@
 
       /* Hero Card Compact (Max) */
       .hero {
-        min-height: auto !important;
+        min-height: 140px !important;
       }
 
       .hero-content {
-        padding: 8px 12px !important;
-        gap: 6px;
-        min-height: 60px;
+        padding: 24px 20px !important;
+        gap: 12px;
+        min-height: 140px;
       }
 
       .hero h1 {
@@ -404,11 +414,11 @@
 
       /* Tighter card spacing on mobile */
       .card {
-        padding: 16px;
+        padding: 22px;
       }
 
       .sec-card {
-        padding: 12px;
+        padding: 16px;
       }
 
       /* Compact Nav for small screens */
@@ -473,8 +483,8 @@
       gap: 28px;
       animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
       /* perspective removed — it creates a containing block that breaks position:fixed on the nav */
-      padding-bottom: 100px;
-      /* Account for fixed nav */
+      padding: 0 16px 100px 16px;
+      /* Account for fixed nav, removed top padding */
     }
 
     @keyframes fadeIn {
@@ -515,10 +525,12 @@
       border-radius: var(--radius);
       padding: 0;
       color: white;
+      background-color: var(--surface);
       box-shadow: var(--elevation-2);
       position: relative;
       overflow: hidden;
-      border: 1px solid var(--outline);
+      border: 1px solid var(--outline-variant);
+      transform: translateZ(0); /* Fix for subpixel rendering edge bleed */
       transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease;
       min-height: 180px;
     }
@@ -902,7 +914,7 @@
       background: var(--primary-container);
       color: var(--primary);
       border: 1px solid rgba(132, 204, 22, 0.3);
-      border-radius: 20px;
+      border-radius: var(--radius);
       padding: 6px 14px;
       font-size: 12px;
       font-weight: 600;
@@ -1005,7 +1017,7 @@
 
     .task-card-item {
       border-radius: 14px;
-      padding: 12px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -1015,6 +1027,7 @@
       overflow: visible;
       min-width: 155px;
       max-width: 155px;
+      min-height: 130px;
       flex-shrink: 0;
       scroll-snap-align: start;
       transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease;
@@ -1068,7 +1081,7 @@
       font-size: 8px;
       font-weight: 700;
       padding: 2px 6px;
-      border-radius: 20px;
+      border-radius: var(--radius);
       background: rgba(255, 255, 255, 0.2);
       color: #fff;
       white-space: nowrap;
@@ -1974,7 +1987,7 @@
 
     .sc {
       background: var(--surface);
-      border-radius: 20px;
+      border-radius: var(--radius);
       padding: 24px;
       text-align: center;
       border: 1px solid var(--outline);
@@ -2824,7 +2837,7 @@
       background: var(--primary-container);
       color: var(--primary);
       padding: 4px 12px;
-      border-radius: 20px;
+      border-radius: var(--radius);
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
@@ -2834,7 +2847,7 @@
     .toast {
       background: var(--surface-glass);
       border: 1px solid var(--outline);
-      border-radius: 20px;
+      border-radius: var(--radius);
       box-shadow: var(--elevation-3);
       min-width: 220px;
       max-width: 360px;
@@ -2881,7 +2894,7 @@
     /* Language Selector in Menu */
     #languageSelector {
       background: var(--surface-container);
-      border-radius: 20px;
+      border-radius: var(--radius);
       padding: 4px;
       display: flex;
       gap: 4px;
@@ -4653,7 +4666,7 @@
                 class="translatable">
                 Status</div>
               <div id="motionStatusBadge"
-                style="margin-top: 4px; padding: 4px 12px; background: rgba(52, 168, 83, 0.2); color: var(--success); border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block;"
+                style="margin-top: 4px; padding: 4px 12px; background: rgba(52, 168, 83, 0.2); color: var(--success); border-radius: var(--radius); font-size: 12px; font-weight: 600; display: inline-block;"
                 class="translatable">
                 SECURE</div>
             </div>
@@ -4995,9 +5008,8 @@
 
           <!-- Project Hero Section -->
           <div
-            style="background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(10, 20, 10, 0.85)), url('about_header.jpg') center/cover no-repeat; border: 1px solid var(--outline-variant); border-radius: 20px; padding: 36px 24px; margin-bottom: 24px; text-align: center; box-shadow: var(--elevation-3);">
-            <img src="app_logo.png" alt="Agri-Nigrani Logo"
-              style="width: 90px; height: 90px; object-fit: contain; margin: 0 auto 16px auto; display: block; filter: drop-shadow(0 4px 12px rgba(132, 204, 22, 0.4));">
+            style="background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(10, 20, 10, 0.85)), url('about_header.jpg') center/cover no-repeat; border: 1px solid var(--outline-variant); border-radius: var(--radius); padding: 36px 24px; margin-bottom: 24px; text-align: center; box-shadow: var(--elevation-3);">
+
             <h3 class="translatable"
               style="font-size: 26px; font-weight: 800; color: #ffffff; margin-bottom: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.6); letter-spacing: -0.5px;">
               Agri-Nigrani System</h3>
@@ -5103,7 +5115,7 @@
 
           <!-- Benefits Card -->
           <div
-            style="background: var(--surface-container); border-radius: 20px; padding: 24px; border: 1px solid var(--outline-variant); box-shadow: var(--elevation-2);">
+            style="background: var(--surface-container); border-radius: var(--radius); padding: 24px; border: 1px solid var(--outline-variant); box-shadow: var(--elevation-2);">
             <h4 class="translatable"
               style="font-size: 17px; font-weight: 800; color: var(--on-surface); margin: 0 0 18px 0; display: flex; align-items: center; gap: 8px;">
               <span class="material-symbols-rounded" style="color: #fbbc05;">star</span>
@@ -5304,6 +5316,11 @@
          NUTRIENT LOSS MONITOR TAB
          ========================================== -->
   <div id="nutrientTab" class="tab-content">
+    <div class="head" style="display: flex; align-items: center; gap: 12px; padding: 4px 0; margin-bottom: 8px;">
+      <button onclick="switchTab('homeTab')" class="btn sec" style="padding: 8px; min-width: 40px; border-radius: 12px;">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+    </div>
     <!-- Global Alert Banner (shown when active) -->
     <div id="nutrientAlertBanner"
       style="display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10000; padding: 16px; background: linear-gradient(135deg, #ea4335 0%, #d32f2f 100%); box-shadow: 0 4px 12px rgba(234, 67, 53, 0.3);">
@@ -5325,7 +5342,7 @@
     </div>
 
     <section class="hero nutrient-hero"
-      style="margin-top: 0; min-height: auto; display: flex; align-items: center; border-radius: 16px; margin-bottom: 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); position: relative; overflow: hidden;">
+      style="margin-top: 0; min-height: 120px; display: flex; align-items: center; border-radius: 16px; margin-bottom: 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); position: relative; overflow: hidden;">
       <!-- Custom background for Nutrient Monitor -->
       <div
         style="position: absolute; inset: 0; background: url('nutrients_loss_header.jpeg') center/cover no-repeat; z-index: 0;">
@@ -5335,7 +5352,7 @@
       </div>
 
       <div class="hero-content"
-        style="text-align: center; width: 100%; position: relative; z-index: 2; padding: 20px 24px;">
+        style="text-align: center; width: 100%; position: relative; z-index: 2; padding: 12px 24px;">
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
           <span class="material-symbols-rounded" style="font-size: 32px; color: #4ade80;">water_drop</span>
           <h1
